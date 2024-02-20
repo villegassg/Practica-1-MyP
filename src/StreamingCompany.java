@@ -17,6 +17,7 @@ public abstract class StreamingCompany
     /** Los servicios que tiene contratado cada cliente. */
     private Hashtable<StreamingCompanyClient, Service> servicePerClient;
 
+
     /**
      * Constructor único de una compañía de streaming. Le asigna un nombre y 
      * una lista de servicios a una compañía de streaming.
