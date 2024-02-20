@@ -10,5 +10,28 @@ public interface StreamingCompanyClient {
      * de streaming.
      */
     public void update();
-    
+}
+// Idea de Implemnetacion 
+public class Client implements StreamingCompanyClient {
+    // Atributos existentes...
+    private LocalDate serviceStartDate;
+    private boolean isPromotionApplied;
+
+    // Constructor y métodos existentes...
+
+    public LocalDate getServiceStartDate() {
+        return serviceStartDate;
+    }
+
+    public void setServiceStartDate(LocalDate serviceStartDate) {
+        this.serviceStartDate = serviceStartDate;
+    }
+
+    public boolean isPromotionApplied() {
+        return isPromotionApplied;
+    }
+
+    public void setPromotionApplied(boolean promotionApplied) {
+        isPromotionApplied = promotionApplied;
+    }
 }
