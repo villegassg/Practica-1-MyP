@@ -23,6 +23,6 @@ public interface StreamingCompanyBehavior {
      */
     public void notifyUnregister(Client c);    
     //--------------------------------------------------------------------------------
-    void applyPromotion(Client c);
-    void chargeClient(Client c);
+    public void applyPromotion(Client c);
+    public void chargeClient(Client c);
 }
