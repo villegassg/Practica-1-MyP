@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +23,7 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
     public StreamingCompany(String name, ArrayList<Service> services) {
         this.name = name;
         this.services = services;
+        this.clients = new ArrayList<>();
     }
 
     /**
@@ -30,7 +32,8 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
      * @param c el cliente a registrar.
      */
     public void registerClient(Client c) {
-
+        clients.add(c);
+        notifyRegister(c);
     }
 
     /**
@@ -39,7 +42,8 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
      * @param c el cliente a eliminar.
      */
     public void removeClient(Client c) {
-
+        clients.remove(c);
+        notifyUnregister(c);
     }
 
     /**
@@ -59,6 +63,12 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
      * acaba de desuscribir.
      */
     public abstract void notifyUnregister(Client c);
+
+    /**
+     * Le hace el cobro a todos los clientes de la compañía por sus servicios.
+     */
+    public abstract void charge();
+
     //---------------------------------------------------------------------------------
     @Override
     public void applyPromotion(Client c) {
@@ -83,23 +93,18 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
         notifyPayment();
     }
     //-----------------------------------------------------------------------------------------------
+
     private float calculateFullPrice() {
-    float total = 0;
-    for (Service service : services) {
-        total += service.getCost();
+        float total = 0;
+        for (Service service : services) {
+            total += service.getCost();
+        }
+        return total;
     }
-    return total;
-}
 
-private float calculateDiscountedPrice() {
-    float fullPrice = calculateFullPrice();
-    // Asegúrate de que el descuento no lleve el precio a ser negativo
-    return Math.max(fullPrice - 120, 0);
-}
-
-    /**
-     * Le hace el cobro a todos los clientes de la compañía por sus servicios.
-     */
-    public abstract void charge();
-    
-}
+    private float calculateDiscountedPrice() {
+        float fullPrice = calculateFullPrice();
+        // Asegúrate de que el descuento no lleve el precio a ser negativo
+        return Math.max(fullPrice - 120, 0);
+    }
+} 
