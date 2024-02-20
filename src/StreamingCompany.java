@@ -59,9 +59,47 @@ public abstract class StreamingCompany implements StreamingCompanyBehavior, Stre
      * acaba de desuscribir.
      */
     public abstract void notifyUnregister(Client c);
+    //---------------------------------------------------------------------------------
+    @Override
+    public void applyPromotion(Client c) {
+        // Aplicar 3 meses gratis y 120 pesos de descuento
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+        if (c.getServiceStartDate().isBefore(threeMonthsAgo)) {
+            c.setPromotionApplied(true); // Un flag para indicar que la promoción ya fue aplicada
+            c.update("A promotional discount has been applied to your account.");
+        }
+    }
+
+    @Override
+    public void chargeClient(Client c) {
+        // Realizar el cobro considerando la promoción
+        if (c.isPromotionApplied()) {
+            // Si ya se aplicó la promoción, cobrar con descuento
+            c.setMoney(c.getMoney() - calculateDiscountedPrice());
+        } else {
+            // Si no, cobrar el precio completo
+            c.setMoney(c.getMoney() - calculateFullPrice());
+        }
+        notifyPayment();
+    }
+    //-----------------------------------------------------------------------------------------------
+    private float calculateFullPrice() {
+    float total = 0;
+    for (Service service : services) {
+        total += service.getCost();
+    }
+    return total;
+}
+
+private float calculateDiscountedPrice() {
+    float fullPrice = calculateFullPrice();
+    // Asegúrate de que el descuento no lleve el precio a ser negativo
+    return Math.max(fullPrice - 120, 0);
+}
 
     /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
      */
     public abstract void charge();
+    
 }
