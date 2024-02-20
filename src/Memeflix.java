@@ -19,30 +19,39 @@ public class Memeflix extends StreamingCompany {
      * Le notifica su pago mensual a todos los clientes (asumiendo que todos
      * contrataron el servicio al mismo tiempo).
      */
+    @Override
     public void notifyPayment() {
-
+        for (Client client : clients) {
+            System.out.println("Se ha cobrado el servicio de Memeflix a " + client.getName());
+        }
     }
 
     /**
      * Le notifica de su registro a la compañía de streaming al cliente que se 
      * acaba de suscribir.
      */
+    @Override
     public void notifyRegister(Client c) {
-
+        System.out.println("El cliente " + c.getName() + " se ha registrado en Memeflix.");
     }
 
     /**
      * Le notifica de su desuscripción a la compañía de streaming al cliente que se 
      * acaba de desuscribir.
      */
+    @Override
     public void notifyUnregister(Client c) {
-
+        System.out.println("El cliente " + c.getName() + " se ha desuscrito de Memeflix.");
     }
 
     /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
      */
+    @Override
     public void charge() {
-
+        for (Client client : clients) {
+            System.out.println("Cobro mensual de Memeflix a " + client.getName());
+            client.decreaseBalance(200); // Se cobra $200 por el servicio mensual de Memeflix
+        }
     }
 }
