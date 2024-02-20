@@ -84,4 +84,10 @@ public abstract class StreamingCompany
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
      */
     public abstract void charge();
+
+    /**
+     * Simula que una compañía de streaming está reproduciendo algo de su 
+     * repertorio de productos.
+     */
+    public abstract void play();
 }

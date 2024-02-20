@@ -21,5 +21,11 @@ public interface StreamingCompanyBehavior {
      * streaming.
      * @param c el cliente a notificar.
      */
-    public void notifyUnregister(StreamingCompanyClient c);    
+    public void notifyUnregister(StreamingCompanyClient c);
+
+    /**
+     * Simula que una compañía de streaming está reproduciendo algo de su 
+     * repertorio de productos.
+     */
+    public void play();
 }

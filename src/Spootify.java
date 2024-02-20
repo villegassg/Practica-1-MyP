@@ -49,4 +49,13 @@ public class Spootify extends StreamingCompany {
     public void charge() {
 
     }
+
+    /**
+     * Simula que la compañía Spootify está reproduciendo una canción de prueba 
+     * en su plataforma.
+     */
+    public void play() {
+        String play = this.name + " is playing a song trial. Look out for it!";
+        notify(play);
+    }
 }

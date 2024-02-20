@@ -49,4 +49,13 @@ public class HVOMax extends StreamingCompany {
     public void charge() {
 
     }
+
+    /**
+     * Simula que la compañía HVOMax está reproduciendo una película de prueba 
+     * en su plataforma.
+     */
+    public void play() {
+        String play = this.name + " is playing a movie trial. Look out for it!";
+        notify(play);
+    }
 }
