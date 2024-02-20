@@ -22,4 +22,7 @@ public interface StreamingCompanyBehavior {
      * @param c el cliente a notificar.
      */
     public void notifyUnregister(Client c);    
+    //--------------------------------------------------------------------------------
+    void applyPromotion(Client c);
+    void chargeClient(Client c);
 }
