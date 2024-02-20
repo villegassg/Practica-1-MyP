@@ -3,6 +3,8 @@
  */
 public class Service {
     
+    /** La compañía que posee el servicio. */
+    String streamingCompany;
     /** La descripción del producto. */
     String description;
     /** El costo del produto. */
@@ -16,7 +18,8 @@ public class Service {
      * @param description la descripción del servicio.
      * @param cost el costo del servicio.
      */
-    public Service(String description, int cost) {
+    public Service(String streamingCompany, String description, int cost) {
+        this.streamingCompany = streamingCompany;
         this.description = description;
         this.cost = cost;
     }

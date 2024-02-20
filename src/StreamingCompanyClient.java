@@ -6,9 +6,9 @@
 public interface StreamingCompanyClient {
 
     /**
-     * Actualiza la información que tiene el cliente sobre sus servicios 
-     * de streaming.
+     * Actualiza la información que tiene el cliente sobre sus servicios de 
+     * streaming.
      */
-    public void update();
+    public void update(String message);
     
 }

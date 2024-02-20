@@ -14,12 +14,12 @@ public interface StreamingCompanyBehavior {
      * Le notifica a un cliente de su registro a una compañía de streaming.
      * @param c el cliente a notificar.
      */
-    public void notifyRegister(Client c);
+    public void notifyRegister(StreamingCompanyClient c);
 
     /**
      * Le notifica a un cliente de su desuscripción a una compañía de 
      * streaming.
      * @param c el cliente a notificar.
      */
-    public void notifyUnregister(Client c);    
+    public void notifyUnregister(StreamingCompanyClient c);    
 }

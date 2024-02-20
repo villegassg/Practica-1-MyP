@@ -20,23 +20,27 @@ public class Thisney extends StreamingCompany {
      * contrataron el servicio al mismo tiempo).
      */
     public void notifyPayment() {
-
+        String payment = "you have to pay for your service with " + this.name + ".";
+        notify(payment);
     }
 
     /**
      * Le notifica de su registro a la compañía de streaming al cliente que se 
      * acaba de suscribir.
      */
-    public void notifyRegister(Client c) {
-
+    public void notifyRegister(StreamingCompanyClient c) {
+        String register = "welcome to " + this.name + 
+            ". We hope you have the best experience with us.";
+        notify(register);
     }
 
     /**
      * Le notifica de su desuscripción a la compañía de streaming al cliente que se 
      * acaba de desuscribir.
      */
-    public void notifyUnregister(Client c) {
-
+    public void notifyUnregister(StreamingCompanyClient c) {
+        String unregister = "we're sad you have to leave us :(.";
+        notify(unregister);
     }
 
     /**
