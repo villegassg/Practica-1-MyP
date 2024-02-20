@@ -9,13 +9,13 @@ public abstract class StreamingCompany
     implements StreamingCompanyBehavior, StreamingCompanySubject {
     
     /** El nombre de la compañía de streaming. */
-    String name;
+    public String name;
     /** La lista de servicios de la compañía de streaming. */
-    ArrayList<Service> services;
+    public ArrayList<Service> services;
     /** La lista de clientes de la compañía de streaming. */
-    ArrayList<StreamingCompanyClient> clients;
+    private ArrayList<StreamingCompanyClient> clients;
     /** Los servicios que tiene contratado cada cliente. */
-    Hashtable<StreamingCompanyClient, Service> servicePerClient;
+    private Hashtable<StreamingCompanyClient, Service> servicePerClient;
 
     /**
      * Constructor único de una compañía de streaming. Le asigna un nombre y 
