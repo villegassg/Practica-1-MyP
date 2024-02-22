@@ -7,25 +7,38 @@ public interface StreamingCompanyBehavior {
 
     /**
      * Le notifica a los clientes el pago de su servicio de streaming.
+     * @param amount la cantidad a pagar.
      */
-    public void notifyPayment();
+    public void notifyPayment(Client c, int amount);
 
     /**
      * Le notifica a un cliente de su registro a una compañía de streaming.
      * @param c el cliente a notificar.
      */
-    public void notifyRegister(StreamingCompanyClient c);
+    public void notifyRegister(Client c);
 
     /**
      * Le notifica a un cliente de su desuscripción a una compañía de 
      * streaming.
      * @param c el cliente a notificar.
      */
-    public void notifyUnregister(StreamingCompanyClient c);
+    public void notifyUnregister(Client c);
+
+    /**
+     * Le notifica al cliente su bienvenida de vuelta al recontratar un 
+     * servicio de streaming.
+     * @param c el cliente a notificar
+     */
+    public void notifyWelcomeBack(Client c);
 
     /**
      * Simula que una compañía de streaming está reproduciendo algo de su 
      * repertorio de productos.
      */
     public void play();
+
+    /**
+     * Simula el paso del tiempo en las compañías.
+     */
+    public void increseTime();
 }

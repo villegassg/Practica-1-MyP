@@ -54,4 +54,17 @@ public class Service {
     public void increaseTimeHired() {
         timeHired+=1;
     }
+
+    /**
+     * Nos dice si un servicio es igual a otro.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() != Service.class) return false;
+        Service s = (Service)o;
+        return this.streamingCompany.equals(s.streamingCompany) &&
+                this.description.equals(s.description) &&
+                this.cost == s.cost &&
+                this.timeHired == s.timeHired;
+    }
 }

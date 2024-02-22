@@ -13,9 +13,18 @@ public abstract class StreamingCompany
     /** La lista de servicios de la compañía de streaming. */
     public ArrayList<Service> services;
     /** La lista de clientes de la compañía de streaming. */
-    private ArrayList<StreamingCompanyClient> clients;
+    protected ArrayList<Client> clients;
     /** Los servicios que tiene contratado cada cliente. */
-    private Hashtable<StreamingCompanyClient, Service> servicePerClient;
+    protected Hashtable<Client, Service> servicePerClient;
+    /** Las recomendaciones del mes. */
+    public String[][] recomendaciones;
+    /** La recomendación a recomendar. */
+    public String recomendacionMes;
+    /** 
+     * El banco con el que los servicios de streaming cobrarán por sus 
+     * servicios.
+     */
+    protected Bank bank;
 
 
     /**
@@ -24,10 +33,12 @@ public abstract class StreamingCompany
      * @param name el nombre de la compañía de streaming.
      * @param services la lista de servicios de la compañía de streaming.
      */
-    public StreamingCompany(String name, ArrayList<Service> services) {
+    public StreamingCompany(String name, ArrayList<Service> services, Bank bank) {
         this.name = name;
         this.services = services;
+        clients = new ArrayList<>();
         servicePerClient = new Hashtable<>();
+        this.bank = bank;
     }
 
     /**
@@ -38,9 +49,16 @@ public abstract class StreamingCompany
      * @param s el servicio asociado al cliente.
      */
     @Override
-    public void registerClient(StreamingCompanyClient c, Service s) {
-        clients.add(c);
-        servicePerClient.put(c, s);
+    public void registerClient(Client c, Service s) {
+        if (servicePerClient.containsKey(c)) {
+            if (!s.equals(servicePerClient.get(c)))
+                servicePerClient.put(c, s);
+            notifyWelcomeBack(c);
+        } else {
+            clients.add(c);
+            servicePerClient.put(c, s);
+            notifyRegister(c);
+        }
     }
 
     /**
@@ -49,37 +67,54 @@ public abstract class StreamingCompany
      * @param c el cliente a eliminar.
      */
     @Override
-    public void removeClient(StreamingCompanyClient c) {
+    public void removeClient(Client c) {
         clients.remove(c);
+        notifyUnregister(c);
     }
 
+    /**
+     * Le notifica a los clientes sobre un mensaje en específico.
+     * @param message el mensaje a notificar.
+     */
     @Override
     public void notify(String message) {
         if (clients.size() > 0) 
-            for (StreamingCompanyClient c : clients) 
+            for (Client c : clients) 
                 c.update(message);
     }
 
     /**
      * Le notifica su pago mensual a todos los clientes (asumiendo que todos
      * contrataron el servicio al mismo tiempo).
+     * @param c el cliente a notificar.
+     * @param amount la cantidad a pagar.
      */
     @Override
-    public abstract void notifyPayment();
+    public abstract void notifyPayment(Client c, int amount);
 
     /**
      * Le notifica de su registro a la compañía de streaming al cliente que se 
      * acaba de suscribir.
+     * @param c el cliente a notificar.
      */
     @Override
-    public abstract void notifyRegister(StreamingCompanyClient c);
+    public abstract void notifyRegister(Client c);
 
     /**
      * Le notifica de su desuscripción a la compañía de streaming al cliente que se 
      * acaba de desuscribir.
+     * @param c el cliente a notificar.
      */
     @Override
-    public abstract void notifyUnregister(StreamingCompanyClient c);
+    public abstract void notifyUnregister(Client c);
+
+    /**
+     * Le notifica a un cliente su bienvenida de vuelta después de haber recontratado 
+     * un servicio de streaming.
+     * @param c el cliente a notificar.
+     */
+    @Override
+    public abstract void notifyWelcomeBack(Client c);
 
     /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
@@ -90,5 +125,12 @@ public abstract class StreamingCompany
      * Simula que una compañía de streaming está reproduciendo algo de su 
      * repertorio de productos.
      */
+    @Override
     public abstract void play();
+
+    /**
+     * Simula el paso del tiempo en las compañías.
+     */
+    @Override
+    public abstract void increseTime();
 }
