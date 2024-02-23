@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 /**
- * Compañía de streaming HVOMax. Hereda de StreamingCompany.
+ * Compañía de streaming HVO Max. Hereda de StreamingCompany.
  */
-public class HVOMax extends StreamingCompany {
+public class HvoMax extends StreamingCompany {
 
     /** El cobrador de HVOMax. */
     private StrategyHVOMax cobrador;
@@ -34,6 +34,7 @@ public class HVOMax extends StreamingCompany {
      * Le notifica de su registro a la compañía de streaming al cliente que se 
      * acaba de suscribir.
      */
+    @Override
     public void notifyRegister(Client c) {
         String register = "welcome to " + this.name + 
             ". We hope you have the best experience with us.";
@@ -44,6 +45,7 @@ public class HVOMax extends StreamingCompany {
      * Le notifica de su desuscripción a la compañía de streaming al cliente que se 
      * acaba de desuscribir.
      */
+    @Override
     public void notifyUnregister(Client c) {
         String unregister = "we're sad you have to leave " + this.name + " :(.";
         c.update(unregister);
@@ -83,6 +85,7 @@ public class HVOMax extends StreamingCompany {
     /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
      */
+    @Override
     public void charge() {
         ArrayList<Client> toRemove = new ArrayList<>();
         for (Client c : clients) {
