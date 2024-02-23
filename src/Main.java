@@ -85,6 +85,7 @@ public class Main {
         createServices();
         addServices();
         createCompanies();
+        addRecommendations();
         createClients();
         sc = new Scanner(System.in);
 
@@ -139,15 +140,19 @@ public class Main {
 
                     toHire(fausto, thisney, thisneyFirst3Months);
                     toHire(fausto, hvoMax, hvoFirst3Months);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 1: 
-                    allCompaniesCharge();
                     timePass(2);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 2: 
-                    allCompaniesCharge();
                     timePass(3);
 
                     toUnhire(bob, thisney);
@@ -159,26 +164,32 @@ public class Main {
                     toUnhire(fausto, thisney);
                     toUnhire(fausto, hvoMax);
                     toHire(fausto, memeflix, memeflix1Device);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 3: 
-                    allCompaniesCharge();
                     timePass(4);
 
                     toUnhire(bob, memeflix);
                     toUnhire(bob, momazon);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 4: 
-                    allCompaniesCharge();
                     timePass(5);
 
                     toHire(fausto, thisney, thisneyAfter3Months);
                     toHire(fausto, hvoMax, hvoAfter3Months);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 5: 
-                    allCompaniesCharge();
                     timePass(6);
 
                     toHire(diego, thisney, thisneyFirst3Months);
@@ -190,10 +201,12 @@ public class Main {
                     toUnhire(fausto, memeflix);
                     toUnhire(fausto, thisney);
                     toUnhire(fausto, hvoMax);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 7: 
-                    allCompaniesCharge();
                     timePass(7);
 
                     toHire(cesar, spootify, spootifyPremium);
@@ -202,32 +215,38 @@ public class Main {
                     toHire(diego, spootify, spootifyPremium);
                     toUnhire(diego, momazon);
 
+                    allCompaniesRecommend();
                     allCompaniesCharge();
                     break;
                 
                 case 8: 
-                    allCompaniesCharge();
                     timePass(8);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 9: 
-                    allCompaniesCharge();
                     timePass(9);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
                     break;
                 
                 case 10: 
-                    allCompaniesCharge();
                     timePass(10);
 
                     toHire(erika, momazon, momazonPremium);
                     toHire(erika, thisney, thisneyAfter3Months);
                     toHire(erika, hvoMax, hvoAfter3Months);
 
+                    allCompaniesRecommend();
                     allCompaniesCharge();
                     timePass(11);
                     break;
                 
                 case 11: 
+                    allCompaniesRecommend();
                     allCompaniesCharge();
                     break;
                 
@@ -242,7 +261,7 @@ public class Main {
     }
 
     private void newFile() {
-        file = new File("Bitácora_Práctica_1.txt");
+        file = new File("../Bitácora_Práctica_1.txt");
         try {
             FileWriter fw = new FileWriter(file);
             fw.close();
@@ -298,6 +317,38 @@ public class Main {
         hvoMax = new HVOMax("HVO Max", hvoServices, bank);
     }
 
+    private void addRecommendations() {
+        memeflix.addRecommendation(new Recommendation("Tus Travesuras en Febrero"));
+        memeflix.addRecommendation(new Recommendation("Torpe por Amor"));
+        memeflix.addRecommendation(new Recommendation("Desastres románticos"));
+        memeflix.addRecommendation(new Recommendation("Corazones Desordenados"));
+        memeflix.addRecommendation(new Recommendation("Comedia Complicada"));
+
+        momazon.addRecommendation(new Recommendation("El Conjuro"));
+        momazon.addRecommendation(new Recommendation("El Exorcista"));
+        momazon.addRecommendation(new Recommendation("Insidious"));
+        momazon.addRecommendation(new Recommendation("El Resplandor"));
+        momazon.addRecommendation(new Recommendation("Actividad Paranormal"));
+
+        spootify.addRecommendation(new Recommendation("Dákiti"));
+        spootify.addRecommendation(new Recommendation("Baila Baila Baila"));
+        spootify.addRecommendation(new Recommendation("Con Calma"));
+        spootify.addRecommendation(new Recommendation("China"));
+        spootify.addRecommendation(new Recommendation("Tusa"));
+
+        thisney.addRecommendation(new Recommendation("El Rey León"));
+        thisney.addRecommendation(new Recommendation("La Bella y la Bestia"));
+        thisney.addRecommendation(new Recommendation("La Sirenita"));
+        thisney.addRecommendation(new Recommendation("Aladdin"));
+        thisney.addRecommendation(new Recommendation("El Libro de la Selva"));
+
+        hvoMax.addRecommendation(new Recommendation("Naruto: El Ninja que Olvidó su Ramen"));
+        hvoMax.addRecommendation(new Recommendation("Dragon Ball Z"));
+        hvoMax.addRecommendation(new Recommendation("One Piece"));
+        hvoMax.addRecommendation(new Recommendation("Attack on Titan"));
+        hvoMax.addRecommendation(new Recommendation("Death Note"));
+    }
+
     private void createClients() {
         alicia = new Client("Alicia", 15000);
         bob = new Client("Bob", 2400);
@@ -347,5 +398,13 @@ public class Main {
         spootify.increseTime();
         thisney.increseTime();
         hvoMax.increseTime();
+    }
+
+    private void allCompaniesRecommend() {
+        memeflix.notifyRecommendation();
+        momazon.notifyRecommendation();
+        spootify.notifyRecommendation();
+        thisney.notifyRecommendation();
+        hvoMax.notifyRecommendation();
     }
 }

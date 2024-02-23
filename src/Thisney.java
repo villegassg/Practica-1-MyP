@@ -61,6 +61,16 @@ public class Thisney extends StreamingCompany {
     }
 
     /**
+     * Le notifica a los clientes sobre la recomendación del mes.
+     */
+    public void notifyRecommendation() {
+        int movie = random.nextInt(recommendations.size());
+        String recommendation = String.format("%s recommends you to watch %s.", 
+            this.name, recommendations.get(movie).getDescription());
+        notify(recommendation);
+    }
+
+    /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.
      */
     public void charge() {

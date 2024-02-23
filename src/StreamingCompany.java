@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 /**
  * Clase pública StreamingCompany, define el comportamiento estándar 
@@ -17,9 +18,11 @@ public abstract class StreamingCompany
     /** Los servicios que tiene contratado cada cliente. */
     protected Hashtable<Client, Service> servicePerClient;
     /** Las recomendaciones del mes. */
-    public String[][] recomendaciones;
+    public ArrayList<Recommendation> recommendations;
     /** La recomendación a recomendar. */
-    public String recomendacionMes;
+    public String recommendationMonth;
+    /** El generador de números aleatorios para recomendar una película. */
+    protected Random random;
     /** 
      * El banco con el que los servicios de streaming cobrarán por sus 
      * servicios.
@@ -38,7 +41,9 @@ public abstract class StreamingCompany
         this.services = services;
         clients = new ArrayList<>();
         servicePerClient = new Hashtable<>();
+        recommendations = new ArrayList<>();
         this.bank = bank;
+        random = new Random();
     }
 
     /**
@@ -115,6 +120,21 @@ public abstract class StreamingCompany
      */
     @Override
     public abstract void notifyWelcomeBack(Client c);
+
+    /**
+     * Le notifica a los clientes sobre la recomendación del mes.
+     */
+    @Override
+    public abstract void notifyRecommendation();
+
+    /**
+     * Agrega una recomendación a la lista de recomendaciones.
+     * @param r la recomendación a agregar.
+     */
+    @Override
+    public void addRecommendation(Recommendation r) {
+        recommendations.add(r);
+    }
 
     /**
      * Le hace el cobro a todos los clientes de la compañía por sus servicios.

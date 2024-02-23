@@ -1,7 +1,5 @@
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +14,7 @@ public class Client implements StreamingCompanyClient{
     /** La lista de servicios que tiene contratados el cliente. */
     ArrayList<Service> streamingServices;
     /** El archivo donde se escribirá la salida del programa. */
-    String file = "Bitácora_Práctica_1.txt";
+    String file = "../Bitácora_Práctica_1.txt";
 
     /**
      * Constructor único. Recibe el nombre y la cantidad de dinero deseada

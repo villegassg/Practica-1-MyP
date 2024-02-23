@@ -32,6 +32,17 @@ public interface StreamingCompanyBehavior {
     public void notifyWelcomeBack(Client c);
 
     /**
+     * Le notifica a los clientes sobre la recomendación del mes.
+     */
+    public void notifyRecommendation();
+
+    /**
+     * Agrega una recomendación a la lista de recomendaciones.
+     * @param r la recomendación a agregar.
+     */
+    public void addRecommendation(Recommendation r);
+
+    /**
      * Simula que una compañía de streaming está reproduciendo algo de su 
      * repertorio de productos.
      */
