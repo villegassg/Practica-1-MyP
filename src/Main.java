@@ -3,11 +3,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+
 /*
  * Clase principal, gobierna el funcionamiento del programa de la práctica 
  * 1 de Modelado y Programación.
  */
-
 public class Main {
 
     /** Se utilizará para leer la entrada del usuario. */
@@ -80,6 +80,10 @@ public class Main {
     /** El mes en el que estamos. */
     int month = -1;
 
+    /**
+     * Método principal. Efectúa el comportamiento de los clientes a través de la
+     * simulación del paso de un año en el tiempo.
+     */
     public void run() {
         newFile();
         createServices();
@@ -206,7 +210,7 @@ public class Main {
                     allCompaniesCharge();
                     break;
                 
-                case 7: 
+                case 6: 
                     timePass(7);
 
                     toHire(cesar, spootify, spootifyPremium);
@@ -219,21 +223,21 @@ public class Main {
                     allCompaniesCharge();
                     break;
                 
-                case 8: 
+                case 7: 
                     timePass(8);
 
                     allCompaniesRecommend();
                     allCompaniesCharge();
                     break;
                 
-                case 9: 
+                case 8: 
                     timePass(9);
 
                     allCompaniesRecommend();
                     allCompaniesCharge();
                     break;
                 
-                case 10: 
+                case 9: 
                     timePass(10);
 
                     toHire(erika, momazon, momazonPremium);
@@ -242,14 +246,19 @@ public class Main {
 
                     allCompaniesRecommend();
                     allCompaniesCharge();
-                    timePass(11);
                     break;
                 
-                case 11: 
+                case 10: 
+                    timePass(11);
                     allCompaniesRecommend();
                     allCompaniesCharge();
                     break;
                 
+                case 11: 
+                    timePass(12);
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
                 case 12: 
                     System.exit(0);
                     break;
@@ -260,6 +269,10 @@ public class Main {
         } while (true);
     }
 
+    /**
+     * Crea un nuevo archivo, y borra todo su contenido en caso de que exista uno 
+     * con el mismo nombre.
+     */
     private void newFile() {
         file = new File("../Bitácora_Práctica_1.txt");
         try {
@@ -270,7 +283,9 @@ public class Main {
         }
     }
 
-
+    /**
+     * Inicializa a todos los servicios que tendrán todas las compañías.
+     */
     private void createServices() {
         memeflix1Device = new Service("Memeflix", "Memeflix (1 dispositivo)", 120);
         memeflix2Devices = new Service("Memeflix", "Memeflix (2 dispositivos)", 170);
@@ -289,6 +304,10 @@ public class Main {
         hvoAfter3Months = new Service("HVO Max", "HVO Max (Después de 3 meses)", 140);
     }
 
+    /**
+     * Agrega los servicios de cada empresa a una lista que representa a los 
+     * servicios de cada empresa.
+     */
     private void addServices() {
         memeflixServices.add(memeflix1Device);
         memeflixServices.add(memeflix2Devices);
@@ -307,6 +326,9 @@ public class Main {
         hvoServices.add(hvoAfter3Months);
     }
 
+    /**
+     * Inicializa las instancias de las compañías.
+     */
     private void createCompanies() {
         bank = new Bank();
 
@@ -317,6 +339,9 @@ public class Main {
         hvoMax = new HVOMax("HVO Max", hvoServices, bank);
     }
 
+    /**
+     * Agrega recomendaciones a las listas de recomendaciones de cada compañía.
+     */
     private void addRecommendations() {
         memeflix.addRecommendation(new Recommendation("Tus Travesuras en Febrero"));
         memeflix.addRecommendation(new Recommendation("Torpe por Amor"));
@@ -349,6 +374,9 @@ public class Main {
         hvoMax.addRecommendation(new Recommendation("Death Note"));
     }
 
+    /**
+     * Inicializa a los clientes.
+     */
     private void createClients() {
         alicia = new Client("Alicia", 15000);
         bob = new Client("Bob", 2400);
@@ -365,16 +393,32 @@ public class Main {
         bank.add(fausto);
     }
 
+    /**
+     * Simula la contratación de un servicio por parte de un cliente.
+     * @param c el cliente que contratará el servicio.
+     * @param sc la compañía que posee el servicio.
+     * @param s el servicio.
+     */
     private void toHire(Client c, StreamingCompany sc, Service s) {
         c.hire(s);
         sc.registerClient(c, s);
     }
 
+    /**
+     * Simula la descontratación de un servicio por parte de un cliente.
+     * @param c el cliente.
+     * @param sc la empresa de la que el cliente se deslindará.
+     */
     private void toUnhire(Client c, StreamingCompany sc) {
         c.unhire(sc);
         sc.removeClient(c);
     }
 
+    /**
+     * Simula el paso de un mes en el tiempo. Únicamente imprime en la consola
+     * y escribe en el archivo el mes que pasó.
+     * @param month el número de mes que ha pasado.
+     */
     private void timePass(int month) {
         System.out.println("\n Month " + month + "\n\n");
         try {
@@ -386,6 +430,9 @@ public class Main {
         }
     } 
 
+    /**
+     * Simula el proceso de cobranza de todas las compañías.
+     */
     private void allCompaniesCharge() {
         memeflix.charge();
         momazon.charge();
@@ -400,6 +447,9 @@ public class Main {
         hvoMax.increseTime();
     }
 
+    /**
+     * Simula el proceso de recomendación de todas las compañías.
+     */
     private void allCompaniesRecommend() {
         memeflix.notifyRecommendation();
         momazon.notifyRecommendation();

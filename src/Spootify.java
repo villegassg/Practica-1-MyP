@@ -45,7 +45,7 @@ public class Spootify extends StreamingCompany {
      * acaba de desuscribir.
      */
     public void notifyUnregister(Client c) {
-        String unregister = "we're sad you have to leave us :(.";
+        String unregister = "we're sad you have to leave " + this.name + " :(.";
         c.update(unregister);
     }
 
@@ -58,6 +58,16 @@ public class Spootify extends StreamingCompany {
         String welcomeBack = "welcome back to " + this.name + 
             ". We hope you stay this time :').";
         c.update(welcomeBack);
+    }
+
+    /**
+     * Le notifica a un cliente sobre el cambio de su servicio.
+     * @param c el cliente.
+     * @param s la descripción de su nuevo servicio.
+     */
+    public void notifyChangeService(Client c, String s) {
+        String change = "you've changed your service to " + s;
+        c.update(change);
     }
 
     /**
@@ -103,7 +113,9 @@ public class Spootify extends StreamingCompany {
         notify(play);
     }
 
-
+    /**
+     * Simula el paso del tiempo, le incrementa un mes al servicio de cada cliente.
+     */
     public void increseTime() {
         for (Client c : clients) {
             Service s = servicePerClient.get(c);

@@ -32,6 +32,13 @@ public interface StreamingCompanyBehavior {
     public void notifyWelcomeBack(Client c);
 
     /**
+     * Le notifica a un cliente sobre el cambio de su servicio.
+     * @param c el cliente.
+     * @param s la descripción de su nuevo servicio.
+     */
+    public void notifyChangeService(Client c, String s);
+
+    /**
      * Le notifica a los clientes sobre la recomendación del mes.
      */
     public void notifyRecommendation();

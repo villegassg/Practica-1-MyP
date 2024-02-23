@@ -55,7 +55,10 @@ public abstract class StreamingCompany
      */
     @Override
     public void registerClient(Client c, Service s) {
-        if (servicePerClient.containsKey(c)) {
+        if(clients.contains(c)) {
+            notifyChangeService(c, s.getDescription());
+            servicePerClient.put(c, s);
+        } else if (servicePerClient.containsKey(c)) {
             if (!s.equals(servicePerClient.get(c)))
                 servicePerClient.put(c, s);
             notifyWelcomeBack(c);
@@ -120,6 +123,14 @@ public abstract class StreamingCompany
      */
     @Override
     public abstract void notifyWelcomeBack(Client c);
+
+    /**
+     * Le notifica a un cliente sobre el cambio de su servicio.
+     * @param c el cliente.
+     * @param s la descripción de su nuevo servicio.
+     */
+    @Override
+    public abstract void notifyChangeService(Client c, String s);
 
     /**
      * Le notifica a los clientes sobre la recomendación del mes.
