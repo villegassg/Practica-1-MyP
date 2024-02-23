@@ -7,12 +7,19 @@ public interface StreamingCompanySubject {
     /**
      * Registra al cliente a un servicio de streaming.
      * @param c el cliente a registrar.
+     * @param s el servicio asociado al cliente
      */
-    public void registerClient(Client c);
+    public void registerClient(Client c, Service s);
 
     /**
      * Desuscribe al cliente de un servicio de streaming.
      * @param c el cliente a desuscribir.
      */
     public void removeClient(Client c);
+
+    /**
+     * Le notifica a los clientes sobre un mensaje en específico.
+     * @param message el mensaje a notificar.
+     */
+    public void notify(String message);
 }

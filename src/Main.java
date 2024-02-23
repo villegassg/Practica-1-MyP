@@ -1,116 +1,460 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 import java.util.ArrayList;
 
+/*
+ * Clase principal, gobierna el funcionamiento del programa de la práctica 
+ * 1 de Modelado y Programación.
+ */
 public class Main {
-    public static void main(String[] args) {
-        // Crear instancias de servicios
-        Service memeflix1Device = new Service("Memeflix (1 dispositivo)", 120);
-        Service memeflix2Devices = new Service("Memeflix (2 dispositivos)", 170);
-        Service memeflix4Devices = new Service("Memeflix (4 dispositivos)", 200);
-        Service momazonNormal = new Service("Momazon Prime Video (Normal)", 110);
-        Service momazonPremium = new Service("Momazon Prime Video (Premium)", 150);
-        Service spootifyPremium = new Service("Spootify (Premium)", 80);
-        Service thisneyFirst3Months = new Service("Thisney+ (Primeros 3 meses)", 130);
-        Service thisneyAfter3Months = new Service("Thisney+ (Después de 3 meses)", 160);
-        Service hvoFirst3Months = new Service("HVO Max (Primeros 3 meses)", 0); // Gratis los primeros 3 meses
-        Service hvoAfter3Months = new Service("HVO Max (Después de 3 meses)", 140);
 
-        // Crear instancias de compañías de streaming
-        ArrayList<Service> memeflixServices = new ArrayList<>();
+    /** Se utilizará para leer la entrada del usuario. */
+    Scanner sc;
+
+    /** El archivo donde se escribirá la salida del programa. */
+    File file;
+    
+    /** Servicio de streaming para un dispositivo de Memeflix. */
+    Service memeflix1Device;
+    /** Servicio de streaming para dos dispositivos de Memeflix. */
+    Service memeflix2Devices;
+    /** Servicio de streaming para cuatro dispositivos de Memeflix. */
+    Service memeflix4Devices;
+    /** Servicio de streaming para usuario normal de Momazon. */
+    Service momazonNormal;
+    /** Servicio de streaming para usuario premium de Momazon. */
+    Service momazonPremium;
+    /** Servicio de streaming para usuario normal de Spootify. */
+    Service spootifyNormal;
+    /** Servicio de streaming para usuario premium de Spootify. */
+    Service spootifyPremium;
+    /** Servicio de streaming para los primeros tres meses de Thisney+. */
+    Service thisneyFirst3Months;
+    /** Servicio de streaming para después de los tres meses de Thisney+. */
+    Service thisneyAfter3Months;
+    /** Servicio de streaming para los primeros tres meses de HVO Max. */
+    Service hvoFirst3Months;
+    /** Servicio de streaming para después de los tres meses de HVO Max. */
+    Service hvoAfter3Months;
+
+    /** El banco que efectuará los cobros por los servicios. */
+    Bank bank;
+
+    /** La lista de servicios de la compañía de streaming Memeflix. */
+    ArrayList<Service> memeflixServices = new ArrayList<>();
+    /** La lista de servicios de la compañía de streaming Momazon. */
+    ArrayList<Service> momazonServices = new ArrayList<>();
+    /** La lista de servicios de la compañía de streaming Spootify. */
+    ArrayList<Service> spootifyServices = new ArrayList<>();
+    /** La lista de servicios de la compañía de streaming Thisney+. */
+    ArrayList<Service> thisneyServices = new ArrayList<>();
+    /** La lista de servicios de la compañía de streaming HVOMax. */
+    ArrayList<Service> hvoServices = new ArrayList<>();
+
+    /** La compañía de streaming Memeflix. */
+    Memeflix memeflix;
+    /** La compañía de streaming Momazon. */
+    MomazonPrimeVideo momazon;
+    /** La compañía de streaming Spootify. */
+    Spootify spootify;
+    /** La compañía de streaming Thisney+. */
+    Thisney thisney;
+    /** La compañía de streaming HVOMax. */
+    HVOMax hvoMax;
+
+    /** Cliente Alicia. */
+    Client alicia;
+    /** Cliente Bob. */
+    Client bob;
+    /** Cliente Cesar. */
+    Client cesar;
+    /** Cliente Diego. */
+    Client diego;
+    /** Cliente Erika. */
+    Client erika;
+    /** Cliente Fausto. */
+    Client fausto;
+
+    /** El mes en el que estamos. */
+    int month = -1;
+
+    /**
+     * Método principal. Efectúa el comportamiento de los clientes a través de la
+     * simulación del paso de un año en el tiempo.
+     */
+    public void run() {
+        newFile();
+        createServices();
+        addServices();
+        createCompanies();
+        addRecommendations();
+        createClients();
+        sc = new Scanner(System.in);
+
+        System.out.println("Are you ready to run the best program? [y/n]");
+        String response = sc.next();
+        if (response.equals("n")) System.exit(0);
+        
+        do {
+            System.out.println("\n\n Please select the option you want to execute: \n\n");
+            System.out.println("1. Let a month pass.\n");
+            System.out.println("2. Exit the program :(.\n");
+            int selection = -1;
+
+            while (true) {
+                try {
+                    selection = sc.nextInt();
+                    break;
+                } catch (NumberFormatException nfe) {
+                    System.out.println("Please try again, insert a valid number.\n");
+                }
+            }
+            month++;
+
+            if(selection == 2) System.exit(0);
+
+            switch (month) {
+                case 0 : 
+                    timePass(1);
+
+                    toHire(alicia, memeflix, memeflix4Devices);
+                    toHire(alicia, momazon, momazonPremium);
+                    toHire(alicia, spootify, spootifyPremium);
+                    toHire(alicia, thisney, thisneyFirst3Months);
+                    toHire(alicia, hvoMax, hvoFirst3Months);
+
+                    toHire(bob, memeflix, memeflix4Devices);
+                    toHire(bob, momazon, momazonPremium);
+                    toHire(bob, spootify, spootifyPremium);
+                    toHire(bob, thisney, thisneyFirst3Months);
+                    toHire(bob, hvoMax, hvoFirst3Months);
+
+                    toHire(cesar, thisney, thisneyFirst3Months);
+                    toHire(cesar, hvoMax, hvoFirst3Months);
+
+                    toHire(diego, momazon, momazonPremium);
+                    toHire(diego, spootify, spootifyNormal);
+                    toHire(diego, hvoMax, hvoFirst3Months);
+                    
+                    toHire(erika, memeflix, memeflix4Devices);
+                    toHire(erika, spootify, spootifyNormal);
+                    toHire(erika, hvoMax, hvoFirst3Months);
+
+                    toHire(fausto, thisney, thisneyFirst3Months);
+                    toHire(fausto, hvoMax, hvoFirst3Months);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 1: 
+                    timePass(2);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 2: 
+                    timePass(3);
+
+                    toUnhire(bob, thisney);
+                    toUnhire(bob, hvoMax);
+
+                    toUnhire(erika, hvoMax);
+                    toHire(erika, thisney, thisneyFirst3Months);
+
+                    toUnhire(fausto, thisney);
+                    toUnhire(fausto, hvoMax);
+                    toHire(fausto, memeflix, memeflix1Device);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 3: 
+                    timePass(4);
+
+                    toUnhire(bob, memeflix);
+                    toUnhire(bob, momazon);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 4: 
+                    timePass(5);
+
+                    toHire(fausto, thisney, thisneyAfter3Months);
+                    toHire(fausto, hvoMax, hvoAfter3Months);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 5: 
+                    timePass(6);
+
+                    toHire(diego, thisney, thisneyFirst3Months);
+
+                    toUnhire(erika, memeflix);
+                    toUnhire(erika, spootify);
+                    toUnhire(erika, thisney);
+
+                    toUnhire(fausto, memeflix);
+                    toUnhire(fausto, thisney);
+                    toUnhire(fausto, hvoMax);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 6: 
+                    timePass(7);
+
+                    toHire(cesar, spootify, spootifyPremium);
+
+                    toHire(diego, memeflix, memeflix1Device);
+                    toHire(diego, spootify, spootifyPremium);
+                    toUnhire(diego, momazon);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 7: 
+                    timePass(8);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 8: 
+                    timePass(9);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 9: 
+                    timePass(10);
+
+                    toHire(erika, momazon, momazonPremium);
+                    toHire(erika, thisney, thisneyAfter3Months);
+                    toHire(erika, hvoMax, hvoAfter3Months);
+
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 10: 
+                    timePass(11);
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                
+                case 11: 
+                    timePass(12);
+                    allCompaniesRecommend();
+                    allCompaniesCharge();
+                    break;
+                case 12: 
+                    System.exit(0);
+                    break;
+                default:
+                    break;
+                
+            }
+        } while (true);
+    }
+
+    /**
+     * Crea un nuevo archivo, y borra todo su contenido en caso de que exista uno 
+     * con el mismo nombre.
+     */
+    private void newFile() {
+        file = new File("../Bitácora_Práctica_1.txt");
+        try {
+            FileWriter fw = new FileWriter(file);
+            fw.close();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Inicializa a todos los servicios que tendrán todas las compañías.
+     */
+    private void createServices() {
+        memeflix1Device = new Service("Memeflix", "Memeflix (1 dispositivo)", 120);
+        memeflix2Devices = new Service("Memeflix", "Memeflix (2 dispositivos)", 170);
+        memeflix4Devices = new Service("Memeflix", "Memeflix (4 dispositivos)", 200);
+
+        momazonNormal = new Service("MomazonPrimeVideo", "Momazon Prime Video (Normal)", 110);
+        momazonPremium = new Service("MomazonPrimeVideo", "Momazon Prime Video (Premium)", 150);
+
+        spootifyNormal = new Service("Spootify", "Spootify (Normal)", 0);
+        spootifyPremium = new Service("Spootify", "Spootify (Premium)", 80);
+
+        thisneyFirst3Months = new Service("Thisney+", "Thisney+ (Primeros 3 meses)", 130);
+        thisneyAfter3Months = new Service("Thisney+", "Thisney+ (Después de 3 meses)", 160);
+
+        hvoFirst3Months = new Service("HVO Max", "HVO Max (Primeros 3 meses)", 0);
+        hvoAfter3Months = new Service("HVO Max", "HVO Max (Después de 3 meses)", 140);
+    }
+
+    /**
+     * Agrega los servicios de cada empresa a una lista que representa a los 
+     * servicios de cada empresa.
+     */
+    private void addServices() {
         memeflixServices.add(memeflix1Device);
         memeflixServices.add(memeflix2Devices);
         memeflixServices.add(memeflix4Devices);
-        Memeflix memeflix = new Memeflix("Memeflix", memeflixServices);
 
-        ArrayList<Service> momazonServices = new ArrayList<>();
         momazonServices.add(momazonNormal);
         momazonServices.add(momazonPremium);
-        MomazonPrimeVideo momazon = new MomazonPrimeVideo("Momazon Prime Video", momazonServices);
 
-        ArrayList<Service> spootifyServices = new ArrayList<>();
+        spootifyServices.add(spootifyNormal);
         spootifyServices.add(spootifyPremium);
-        Spootify spootify = new Spootify("Spootify", spootifyServices);
 
-        ArrayList<Service> thisneyServices = new ArrayList<>();
         thisneyServices.add(thisneyFirst3Months);
         thisneyServices.add(thisneyAfter3Months);
-        ThisneyPlus thisney = new ThisneyPlus("Thisney+", thisneyServices);
 
-        ArrayList<Service> hvoServices = new ArrayList<>();
         hvoServices.add(hvoFirst3Months);
         hvoServices.add(hvoAfter3Months);
-        HvoMax hvoMax = new HvoMax("HVO Max", hvoServices);
+    }
 
-        // Crear instancias de clientes
-        Client alicia = new Client("Alicia", 15000);
-        Client bob = new Client("Bob", 2400);
-        Client cesar = new Client("César", 5000);
-        Client diego = new Client("Diego", 9000);
-        Client erika = new Client("Erika", 10000);
-        Client fausto = new Client("Fausto", 5000);
+    /**
+     * Inicializa las instancias de las compañías.
+     */
+    private void createCompanies() {
+        bank = new Bank();
 
-        // Simular la contratación inicial de servicios
-        alicia.hire(memeflix);
-        alicia.hire(momazon);
-        alicia.hire(spootify);
-        alicia.hire(thisney);
-        alicia.hire(hvoMax);
+        memeflix = new Memeflix("Memeflix", memeflixServices, bank);
+        momazon = new MomazonPrimeVideo("Momazon Prime Video", momazonServices, bank);
+        spootify = new Spootify("Spootify", spootifyServices, bank);
+        thisney = new Thisney("Thisney+", thisneyServices, bank);
+        hvoMax = new HVOMax("HVO Max", hvoServices, bank);
+    }
 
-        bob.hire(memeflix);
-        bob.hire(momazon);
-        bob.hire(spootify);
-        bob.hire(thisney);
-        bob.hire(hvoMax);
+    /**
+     * Agrega recomendaciones a las listas de recomendaciones de cada compañía.
+     */
+    private void addRecommendations() {
+        memeflix.addRecommendation(new Recommendation("Tus Travesuras en Febrero"));
+        memeflix.addRecommendation(new Recommendation("Torpe por Amor"));
+        memeflix.addRecommendation(new Recommendation("Desastres románticos"));
+        memeflix.addRecommendation(new Recommendation("Corazones Desordenados"));
+        memeflix.addRecommendation(new Recommendation("Comedia Complicada"));
 
-        cesar.hire(thisney);
-        cesar.hire(hvoMax);
+        momazon.addRecommendation(new Recommendation("El Conjuro"));
+        momazon.addRecommendation(new Recommendation("El Exorcista"));
+        momazon.addRecommendation(new Recommendation("Insidious"));
+        momazon.addRecommendation(new Recommendation("El Resplandor"));
+        momazon.addRecommendation(new Recommendation("Actividad Paranormal"));
 
-        diego.hire(hvoMax);
-        diego.hire(momazon);
-        diego.hire(spootify);
+        spootify.addRecommendation(new Recommendation("Dákiti"));
+        spootify.addRecommendation(new Recommendation("Baila Baila Baila"));
+        spootify.addRecommendation(new Recommendation("Con Calma"));
+        spootify.addRecommendation(new Recommendation("China"));
+        spootify.addRecommendation(new Recommendation("Tusa"));
 
-        erika.hire(memeflix);
-        erika.hire(spootify);
-        erika.hire(hvoMax);
+        thisney.addRecommendation(new Recommendation("El Rey León"));
+        thisney.addRecommendation(new Recommendation("La Bella y la Bestia"));
+        thisney.addRecommendation(new Recommendation("La Sirenita"));
+        thisney.addRecommendation(new Recommendation("Aladdin"));
+        thisney.addRecommendation(new Recommendation("El Libro de la Selva"));
 
-        fausto.hire(thisney);
-        fausto.hire(hvoMax);
+        hvoMax.addRecommendation(new Recommendation("Naruto: El Ninja que Olvidó su Ramen"));
+        hvoMax.addRecommendation(new Recommendation("Dragon Ball Z"));
+        hvoMax.addRecommendation(new Recommendation("One Piece"));
+        hvoMax.addRecommendation(new Recommendation("Attack on Titan"));
+        hvoMax.addRecommendation(new Recommendation("Death Note"));
+    }
 
-        // Simular el transcurso de los meses
-        for (int month = 1; month <= 12; month++) {
-            // Notificar los meses contratados
-            memeflix.notifyMonths(month);
-            momazon.notifyMonths(month);
-            spootify.notifyMonths(month);
-            thisney.notifyMonths(month);
-            hvoMax.notifyMonths(month);
+    /**
+     * Inicializa a los clientes.
+     */
+    private void createClients() {
+        alicia = new Client("Alicia", 15000);
+        bob = new Client("Bob", 2400);
+        cesar = new Client("César", 5000);
+        diego = new Client("Diego", 9000);
+        erika = new Client("Erika", 10000);
+        fausto = new Client("Fausto", 5000);
 
-            // Realizar cobros mensuales
-            memeflix.charge();
-            momazon.charge();
-            spootify.charge();
-            thisney.charge();
-            hvoMax.charge();
+        bank.add(alicia);
+        bank.add(bob);
+        bank.add(cesar);
+        bank.add(diego);
+        bank.add(erika);
+        bank.add(fausto);
+    }
 
-            // Simular cancelaciones y nuevas contrataciones según el mes
-            switch (month) {
-                case 4:
-                    bob.unhire(thisney);
-                    bob.unhire(hvoMax);
-                    break;
-                case 7:
-                    cesar.hire(spootify);
-                    diego.hire(thisney);
-                    diego.unhire(momazon);
-                    erika.unhire(memeflix);
-                    erika.unhire(spootify);
-                    erika.unhire(hvoMax);
-                    break;
-                case 10:
-                    erika.hire(momazon);
-                    erika.hire(hvoMax);
-                    erika.hire(thisney);
-                    break;
-            }
+    /**
+     * Simula la contratación de un servicio por parte de un cliente.
+     * @param c el cliente que contratará el servicio.
+     * @param sc la compañía que posee el servicio.
+     * @param s el servicio.
+     */
+    private void toHire(Client c, StreamingCompany sc, Service s) {
+        c.hire(s);
+        sc.registerClient(c, s);
+    }
+
+    /**
+     * Simula la descontratación de un servicio por parte de un cliente.
+     * @param c el cliente.
+     * @param sc la empresa de la que el cliente se deslindará.
+     */
+    private void toUnhire(Client c, StreamingCompany sc) {
+        c.unhire(sc);
+        sc.removeClient(c);
+    }
+
+    /**
+     * Simula el paso de un mes en el tiempo. Únicamente imprime en la consola
+     * y escribe en el archivo el mes que pasó.
+     * @param month el número de mes que ha pasado.
+     */
+    private void timePass(int month) {
+        System.out.println("\n Month " + month + "\n\n");
+        try {
+            FileWriter fw = new FileWriter(file, true);
+            fw.write("\n Month " + month + "\n\n");
+            fw.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
+    } 
+
+    /**
+     * Simula el proceso de cobranza de todas las compañías.
+     */
+    private void allCompaniesCharge() {
+        memeflix.charge();
+        momazon.charge();
+        spootify.charge();
+        thisney.charge();
+        hvoMax.charge();
+
+        memeflix.increseTime();
+        momazon.increseTime();
+        spootify.increseTime();
+        thisney.increseTime();
+        hvoMax.increseTime();
+    }
+
+    /**
+     * Simula el proceso de recomendación de todas las compañías.
+     */
+    private void allCompaniesRecommend() {
+        memeflix.notifyRecommendation();
+        momazon.notifyRecommendation();
+        spootify.notifyRecommendation();
+        thisney.notifyRecommendation();
+        hvoMax.notifyRecommendation();
     }
 }

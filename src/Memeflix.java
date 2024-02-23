@@ -4,6 +4,8 @@ import java.util.ArrayList;
  * Compañía de streaming Memeflix. Hereda de StreamingCompany.
  */
 public class Memeflix extends StreamingCompany {
+
+    private StrategyMemeflix cobrador;
     
     /**
      * Constructor único de una compañía de streaming. Le asigna un nombre y 
@@ -11,19 +13,20 @@ public class Memeflix extends StreamingCompany {
      * @param name el nombre de la compañía de streaming.
      * @param services la lista de servicios de la compañía de streaming.
      */
-    public Memeflix(String name, ArrayList<Service> services) {
-        super(name, services);
+    public Memeflix(String name, ArrayList<Service> services, Bank bank) {
+        super(name, services, bank);
     }
     
     /**
      * Le notifica su pago mensual a todos los clientes (asumiendo que todos
      * contrataron el servicio al mismo tiempo).
+     * @param c el cliente a notificar.
+     * @param amount la cantidad a pagar por el servicio.
      */
-    @Override
-    public void notifyPayment() {
-        for (Client client : clients) {
-            System.out.println("Se ha cobrado el servicio de Memeflix a " + client.getName());
-        }
+    public void notifyPayment(Client c, int amount) {
+        String payment = String.format("you have to pay $%.2f for your service with %s.", 
+            (float)amount, this.name);
+        c.update(payment);
     }
 
     /**
@@ -32,7 +35,9 @@ public class Memeflix extends StreamingCompany {
      */
     @Override
     public void notifyRegister(Client c) {
-        System.out.println("El cliente " + c.getName() + " se ha registrado en Memeflix.");
+        String register = "welcome to " + this.name + 
+            ". We hope you have the best experience with us.";
+        c.update(register);
     }
 
     /**
@@ -41,7 +46,39 @@ public class Memeflix extends StreamingCompany {
      */
     @Override
     public void notifyUnregister(Client c) {
-        System.out.println("El cliente " + c.getName() + " se ha desuscrito de Memeflix.");
+        String unregister = "we're sad you have to leave " + this.name + " :(.";
+        c.update(unregister);
+    }
+
+    /**
+     * Le notifica a un cliente su bienvenida de vuelta después de haber recontratado 
+     * un servicio de streaming.
+     * @param c el cliente a notificar.
+     */
+    public void notifyWelcomeBack(Client c) {
+        String welcomeBack = "welcome back to " + this.name + 
+            ". We hope you stay this time :').";
+        c.update(welcomeBack);
+    }
+
+    /**
+     * Le notifica a un cliente sobre el cambio de su servicio.
+     * @param c el cliente.
+     * @param s la descripción de su nuevo servicio.
+     */
+    public void notifyChangeService(Client c, String s) {
+        String change = "you've changed your service to " + s;
+        c.update(change);
+    }
+
+    /**
+     * Le notifica a los clientes sobre la recomendación del mes.
+     */
+    public void notifyRecommendation() {
+        int movie = random.nextInt(recommendations.size());
+        String recommendation = String.format("%s recommends you to watch %s.", 
+            this.name, recommendations.get(movie).getDescription());
+        notify(recommendation);
     }
 
     /**
@@ -49,9 +86,47 @@ public class Memeflix extends StreamingCompany {
      */
     @Override
     public void charge() {
-        for (Client client : clients) {
-            System.out.println("Cobro mensual de Memeflix a " + client.getName());
-            client.decreaseBalance(200); // Se cobra $200 por el servicio mensual de Memeflix
+        ArrayList<Client> toRemove = new ArrayList<>();
+        for (Client c : clients) {
+            Service s = servicePerClient.get(c);
+            if (s.equals(services.get(0))) {
+                cobrador = new MemeflixOneDevice();
+                boolean payment = cobrador.charge(c, 120, bank);
+                notifyPayment(c, 120);
+                if (!payment) toRemove.add(c);
+            } else if (s.equals(services.get(1))) {
+                cobrador = new MemeflixTwoDevices();
+                boolean payment = cobrador.charge(c, 170, bank);
+                notifyPayment(c, 170);
+                if (!payment) toRemove.add(c);
+            } else if (s.equals(services.get(2))) {
+                cobrador = new MemeflixFourDevices();
+                boolean payment = cobrador.charge(c, 200, bank);
+                notifyPayment(c, 200);
+                if (!payment) toRemove.add(c);
+            }
+        }
+
+        for (Client c : toRemove)
+            removeClient(c);
+    }
+
+    /**
+     * Simula que la compañía Memeflix está reproduciendo una película de prueba 
+     * en su plataforma.
+     */
+    public void play() {
+        String play = this.name + " is playing a movie trial. Look out for it!";
+        notify(play);
+    }
+
+    /**
+     * Simula el paso del tiempo, le incrementa un mes al servicio de cada cliente.
+     */
+    public void increseTime() {
+        for (Client c : clients) {
+            Service s = servicePerClient.get(c);
+            s.increaseTimeHired();
         }
     }
 }
